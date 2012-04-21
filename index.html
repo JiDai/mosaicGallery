@@ -6,7 +6,7 @@
 		<title>jQuery Mosaic Gallery</title>
 
 		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="jquery.mosaic-gallery-0.2.min.js"></script>
+		<script type="text/javascript" src="jquery.jd-mosaic-gallery.min.js"></script>
 		
 		<link rel="stylesheet" href="styles.css" type="text/css" />
 		
@@ -14,11 +14,11 @@
 		
 		$(document).ready(function() {	
 			
-			var m = $("#mosaic-gallery").mosaicGallery(
+			var m = $("#jd-mosaic-gallery").jdMosaicGallery(
 			{
 				autoStart : true,
 				nbImagesInMosaic : 6,
-				loop : false			
+				loop : false
 			});
 		});
 		
@@ -31,7 +31,7 @@
 	
 		<h1>Mosaic Gallery Example</h1>
 		
-		<ul id="mosaic-gallery">
+		<ul id="jd-mosaic-gallery">
 			<li id="img1"><img src="images/img1.jpg" class="text"/></li>
 			<li id="img2"><img src="images/img2.jpg" class="text"/></li>
 			<li id="img3"><img src="images/img3.jpg" class="text"/></li>
