@@ -1,6 +1,6 @@
 /*
  * jQuery Mosaic Gallery plugin
- * Version 0.3  (May 14, 2011)
+ * Version 0.3  (Oct. 09, 2013)
  * @requires jQuery v1.3+
  *
  * Dual licensed under the MIT and GPL licenses:
