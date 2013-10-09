@@ -1,6 +1,6 @@
 /*
  * jQuery Mosaic Gallery plugin
- * Version 0.2  (May 14, 2011)
+ * Version 0.3  (May 14, 2011)
  * @requires jQuery v1.3+
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -21,24 +21,41 @@
 			indexImageToChange = 0,
 			timer = 0,
 			
-		// Default params
+			// Default params
 			loop = true,
 			nbImagesInMosaic = 6,
 			autoStart = false,
-			loopTime = 2000;
+			loopTime = 2000,
+			
+			debug = false;
 		
-		if( params && params.nbImagesInMosaic !== undefined ) { nbImagesInMosaic = params.nbImagesInMosaic; }
-		if( params && params.autoStart !== undefined ) { autoStart = params.autoStart; }
+		if( params )
+		{
+			if( params.nbImagesInMosaic !== undefined ) { nbImagesInMosaic = params.nbImagesInMosaic; }
+			if( params.autoStart !== undefined ) { autoStart = params.autoStart; }
+			if( params.debug === true ) { debug = true; }
+		}
 		
-		
+		/**
+		 * Initialization function
+		 */
 		$t.initGallery = function ()
 		{
 			var i, img;
-			$t.find('li').each(function(){
+			var $li = $t.find('li');
+			$li.each(function(){
 				images.push($(this));
 			});
 			
 			nbImagesTotal = images.length;
+			if( images.length < nbImagesInMosaic + 1)
+			{
+				if(window.console && window.console.warn)
+				{
+					window.console.warn('Images count must superior to "nbImagesInMosaic" + 1');
+				}
+				nbImagesInMosaic = nbImagesTotal - 1;
+			}
 		
 			for( i = 0; i < nbImagesInMosaic; i++)
 			{
@@ -54,19 +71,30 @@
 			}
 		};
 		
+		/**
+		 * Swith image. Grab an image in the "background" to show it.
+		 */
 		$t.switchImage = function ()
 		{
-	
 			var index = indexImageToChange;
-			var newIndex = index + nbImagesInMosaic;
 			var liTags = $t.find('li');
-	
-			$('#'+liTags[newIndex].id).insertBefore($('#'+liTags[index].id));
-			$('#'+liTags[index].id).insertBefore($('#'+liTags[newIndex+1].id));
-			
-			$('#'+liTags[index].id).hide();
-			$('#'+liTags[newIndex].id).fadeIn("slow");
-			
+			$t.log("liTags : ", liTags);
+
+			$t.log("New : "+liTags.eq(nbImagesInMosaic).attr('id'));
+			liTags.eq(nbImagesInMosaic).insertBefore(liTags.eq(index));
+			liTags.eq(nbImagesInMosaic).fadeIn();
+			liTags = $t.find('li');
+
+			$t.log("Old : "+liTags.eq(index+1).attr('id'));
+			var oldItem = liTags.eq(index+1);
+			var newItem = liTags.eq(nbImagesInMosaic);
+			// We prevent to move an item after itself
+			if(oldItem.attr('id') !== newItem.attr('id'))
+			{
+				oldItem.insertAfter(newItem);
+			}
+			oldItem.hide();
+
 			indexImageToChange++;
 			if( indexImageToChange === nbImagesInMosaic )
 			{
@@ -81,9 +109,30 @@
 			}
 		};
 		
+		/**
+		 * Start to animat the gallery
+		 */
 		$t.startShow = function ()
 		{
 			timer = setInterval(function(){$t.switchImage();}, loopTime);
+		};
+		
+		/**
+		 * Simple log function
+		 */
+		$t.log = function()
+		{
+			if(debug && debug === true && console)
+			{
+				if(navigator.userAgent.toLowerCase().indexOf("applewebkit") !== -1)
+				{
+					console.log(arguments);
+				}
+				else
+				{
+					console.log.apply(this, arguments);
+				}
+			}
 		};
 	
 		$t.initGallery();
